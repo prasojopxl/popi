@@ -123,7 +123,18 @@ export function getUserMe(req: Request, res: Response, next: NextFunction) {
         try {
             const user = await prisma.users.findUnique({
                 where: {
-                    id: dataJwt.data.id
+                    id: dataJwt.data.id,
+                },
+                select: {
+                    id: true,
+                    created_at: true,
+                    updated_at: true,
+                    username: true,
+                    name: true,
+                    role: true,
+                    status: true,
+                    posts: true,
+                    image: true
                 }
             })
             if (!user) {

@@ -30,23 +30,25 @@ export function createImage(req: Request, res: Response, next: NextFunction) {
 
     async function main() {
         try {
-            const image = await prisma.images.create({
-                data: {
-                    title: files[0].originalname,
-                    url: `/public/${files[0].filename}`,
-                    size: parseInt(files[0].size),
-                    width: parseInt(`${imageSize(files[0].path).width}`),
-                    height: parseInt(`${imageSize(files[0].path).height}`),
-                    mimetype: files[0].mimetype
-                }
-            })
+            const images = await Promise.all(files.map(async (file: any) => {
+                return await prisma.images.create({
+                    data: {
+                        title: file.originalname,
+                        url: `/public/${file.filename}`,
+                        size: parseInt(file.size),
+                        width: parseInt(`${imageSize(file.path).width}`),
+                        height: parseInt(`${imageSize(file.path).height}`),
+                        mimetype: file.mimetype
+                    }
+                })
+            }))
             res.status(201).send({
-                message: "Image upload successfully",
-                data: {
-                    title: files[0].originalname,
-                    url: `/public/${files[0].filename}`,
-                    mimetype: files[0].mimetype
-                }
+                message: "Images upload successfully",
+                data: images?.map((image:any) => ({
+                    title: image.title,
+                    url: image.url,
+                    mimetype: image.mimetype
+                }))
             })
         } catch (error) {
             console.log(error)
@@ -83,6 +85,24 @@ export function getImages(req: Request, res: Response, next: NextFunction) {
         try {
             const images = await prisma.images.findMany()
             res.json(images)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    main()
+}
+
+export function deleteImage(req: Request, res: Response, next: NextFunction) {
+    async function main() {
+        try {
+            const image = await prisma.images.delete({
+                where: {
+                    id: req.params.id
+                }
+            })
+            res.json({
+                message: `Image ${req.params.id} deleted successfully`,
+            })
         } catch (error) {
             console.log(error)
         }

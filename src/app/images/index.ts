@@ -1,5 +1,5 @@
 import express from "express"
-import { createImage, getImageID, getImages } from "./controller"
+import { createImage, deleteImage, getImageID, getImages } from "./controller"
 
 const app = express()
 
@@ -9,5 +9,6 @@ app.route("/")
 
 app.route("/:id")
     .get(getImageID)
+    .delete(deleteImage)
 
 export default app

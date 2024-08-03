@@ -61,13 +61,14 @@ export function getUsers(req: Request, res: Response, next: NextFunction) {
             const users = await prisma.users.findMany({
                 select: {
                     id: true,
+                    created_at: true,
+                    updated_at: true,
                     username: true,
                     name: true,
                     role: true,
                     status: true,
-                    created_at: true,
-                    updated_at: true,
                     posts: true,
+                    image: true
                 }
             })
             res.json(users)
@@ -94,6 +95,7 @@ export function getUserID(req: Request, res: Response, next: NextFunction) {
                     created_at: true,
                     updated_at: true,
                     posts: true,
+                    image: true
                 }
             })
             if (!user) {

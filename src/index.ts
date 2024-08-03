@@ -7,8 +7,7 @@ import routeMail from "./app/mail/index"
 import routeAuth from "./app/auth/index"
 import multer from "multer";
 import path from "path"
-
-
+import logger from "./lib/logger";
 // Variable
 dotenv.config()
 const port = process.env.PORT || 7001 || 7002
@@ -38,12 +37,15 @@ const storage = multer.diskStorage({
 });
 
 
+
 // Middleware
 app.use(cors(corsOptions))
 app.use(express.json());
 app.use(express.urlencoded({
     extended: false
 }))
+
+logger.info("App started globar logger")
 
 
 // URL

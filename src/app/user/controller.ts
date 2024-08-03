@@ -10,7 +10,7 @@ export function postUser(req: Request, res: Response, next: NextFunction) {
     const shcema = joi.object().keys({
         name: joi.string().min(3).required(),
         username: joi.string().email().required(),
-        password: joi.string().required()
+        password: joi.string().required(),
     })
     const { error } = shcema.validate(req.body)
     if (error) {
@@ -41,7 +41,7 @@ export function postUser(req: Request, res: Response, next: NextFunction) {
                 data: {
                     name: req.body.name,
                     username: req.body.username,
-                    password: password
+                    password: password,
                 }
             })
             res.send({
@@ -68,7 +68,7 @@ export function getUsers(req: Request, res: Response, next: NextFunction) {
                     role: true,
                     status: true,
                     posts: true,
-                    image: true
+                    // images: true
                 }
             })
             res.json(users)
@@ -95,7 +95,7 @@ export function getUserID(req: Request, res: Response, next: NextFunction) {
                     created_at: true,
                     updated_at: true,
                     posts: true,
-                    image: true
+                    // images: true
                 }
             })
             if (!user) {
@@ -136,7 +136,8 @@ export function getUserMe(req: Request, res: Response, next: NextFunction) {
                     role: true,
                     status: true,
                     posts: true,
-                    image: true
+                    images: true
+                    
                 }
             })
             if (!user) {

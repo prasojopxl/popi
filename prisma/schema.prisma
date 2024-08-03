@@ -20,8 +20,7 @@ model users {
     updated_at DateTime @updatedAt
     status     Boolean  @default(false)
     posts      posts[]
-    imageId    String?
-    image      images?  @relation(fields: [imageId], references: [id])
+    images     images[]
 }
 
 model images {
@@ -34,7 +33,8 @@ model images {
     mimetype   String
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
-    users      users[]
+    userId     String?
+    users      users?        @relation(fields: [userId], references: [id])
 }
 
 model posts {

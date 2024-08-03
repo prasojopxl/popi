@@ -36,7 +36,6 @@ export function Login(req: Request, res: Response, next: NextFunction) {
                 id: checkUser.id,
                 username: checkUser.username,
                 role: checkUser.role,
-                imageId: checkUser.imageId
             }
         }, `${process.env.JWT_SECRET}`)
         if (!checkPassword) {

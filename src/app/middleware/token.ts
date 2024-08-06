@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client'
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import logger from "../../lib/logger";
 
 const prisma = new PrismaClient()
 dotenv.config()
@@ -13,6 +14,8 @@ export const verfyToken = async (req: Request, res: Response, next: NextFunction
             message: "Forbidden Access"
         });
     }
+
+    //token expired        
     const jwtToken = token?.split(" ").pop();
 
     try {
@@ -22,7 +25,8 @@ export const verfyToken = async (req: Request, res: Response, next: NextFunction
                 id: dataJwt.data.id
             }
         })
-        console.log(user)
+        logger.info("user", user)
+        logger.info("App middleware logger....")
         if (!user) {
             return res.status(400).json({
                 message: "User not found",

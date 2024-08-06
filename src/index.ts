@@ -45,7 +45,7 @@ app.use(express.urlencoded({
     extended: false
 }))
 
-logger.info("App started globar logger")
+logger.info("App started global logger...")
 
 
 // URL

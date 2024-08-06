@@ -61,6 +61,13 @@ model categories {
     posts      posts    @relation(fields: [postId], references: [id])
 }
 
+enum role {
+    GUEST
+    USER
+    ADMIN
+    SUPERADMIN
+}
+
 model product_categories {
     id         String   @id @default(uuid()) @map("_id")
     created_at DateTime @default(now())
@@ -71,20 +78,61 @@ model product_categories {
     products   products @relation(fields: [productId], references: [id])
 }
 
-enum role {
-    GUEST
-    USER
-    ADMIN
-    SUPERADMIN
-}
-
-model products {
+model product_variants {
     id         String   @id @default(uuid()) @map("_id")
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
-    title       String
-    price      Int
+    title      String
     status     Boolean  @default(false)
-    product_categories product_categories[]
-    images     images[]
+    productId  String
+    products   products @relation(fields: [productId], references: [id])
+}
+
+model product_rates {
+    id         String   @id @default(uuid()) @map("_id")
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    rate       Int
+    productId  String
+    products   products @relation(fields: [productId], references: [id])
+}
+
+model product_promos {
+    id         String   @id @default(uuid()) @map("_id")
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    title      String
+    status     Boolean  @default(false)
+    productId  String
+    products   products @relation(fields: [productId], references: [id])
+}
+
+model products {
+    id                  String   @id @default(uuid()) @map("_id")
+    created_at          DateTime @default(now())
+    updated_at          DateTime @updatedAt
+    title               String
+    price               Int
+    status              Boolean  @default(false)
+    description         String
+    stock               Int
+    recommended         Boolean  @default(false)
+    rate_count          Int
+    product_categories  product_categories[]
+    product_variants    product_variants[]
+    product_promos      product_promos[]
+    images              images[]
+    product_rates       product_rates[]
+    orders              orders[]
+}
+
+model orders {
+    id                  String   @id @default(uuid()) @map("_id")
+    created_at          DateTime @default(now())
+    updated_at          DateTime @updatedAt
+    status              Boolean  @default(false)
+    payment_method      String
+    products            products[]
+    total               Int
+    address             String
 }

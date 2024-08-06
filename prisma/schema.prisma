@@ -12,12 +12,12 @@ datasource db {
 
 model users {
     id         String   @id @default(uuid()) @map("_id")
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
     name       String
     username   String   @unique
     password   String
     role       role     @default(GUEST)
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
     status     Boolean  @default(false)
     posts      posts[]
     images     images[]
@@ -25,38 +25,50 @@ model users {
 
 model images {
     id         String   @id @default(uuid()) @map("_id")
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
     title      String
     url        String
     size       Int
     width      Int
     height     Int
     mimetype   String
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
     userId     String?
     users      users?        @relation(fields: [userId], references: [id])
+    productId  String?
+    products   products?     @relation(fields: [productId], references: [id])
 }
 
 model posts {
     id         String       @id @default(uuid()) @map("_id")
+    created_at DateTime     @default(now())
+    updated_at DateTime     @updatedAt
     title      String
     content    String?      @db.Text
     userId     String
     users      users        @relation(fields: [userId], references: [id])
     status     Boolean      @default(false)
-    created_at DateTime     @default(now())
-    updated_at DateTime     @updatedAt
     categories categories[]
 }
 
 model categories {
     id         String   @id @default(uuid()) @map("_id")
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
     title      String
     status     Boolean  @default(false)
     postId     String
     posts      posts    @relation(fields: [postId], references: [id])
+}
+
+model product_categories {
+    id         String   @id @default(uuid()) @map("_id")
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
+    title      String
+    status     Boolean  @default(false)
+    productId  String
+    products   products @relation(fields: [productId], references: [id])
 }
 
 enum role {
@@ -64,4 +76,15 @@ enum role {
     USER
     ADMIN
     SUPERADMIN
+}
+
+model products {
+    id         String   @id @default(uuid()) @map("_id")
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    title       String
+    price      Int
+    status     Boolean  @default(false)
+    product_categories product_categories[]
+    images     images[]
 }

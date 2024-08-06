@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, role } from "@prisma/client";
 import { Request, Response, NextFunction } from 'express';
 import joi from "joi"
 import bcrypt, { compareSync } from "bcryptjs"
@@ -45,6 +45,8 @@ export function Login(req: Request, res: Response, next: NextFunction) {
         }
         return res.json({
             message: "Login successfully",
+            status: true,
+            role: checkUser.role,
             name: checkUser.name,
             token
         })

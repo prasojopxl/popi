@@ -24,19 +24,21 @@ model users {
 }
 
 model images {
-    id         String   @id @default(uuid()) @map("_id")
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
-    title      String
-    url        String
-    size       Int
-    width      Int
-    height     Int
-    mimetype   String
-    userId     String?
-    users      users?        @relation(fields: [userId], references: [id])
-    productId  String?
-    products   products?     @relation(fields: [productId], references: [id])
+    id                  String   @id @default(uuid()) @map("_id")
+    created_at          DateTime @default(now())
+    updated_at          DateTime @updatedAt
+    title               String
+    url                 String
+    size                Int
+    width               Int
+    height              Int
+    mimetype            String
+    userId              String?
+    users               users?        @relation(fields: [userId], references: [id])
+    productId           String?
+    products            products?     @relation(fields: [productId], references: [id])
+    product_varian_id   String?
+    product_variants    product_variants? @relation(fields: [product_varian_id], references: [id])
 }
 
 model posts {
@@ -76,6 +78,7 @@ model product_categories {
     status     Boolean  @default(false)
     productId  String
     products   products @relation(fields: [productId], references: [id])
+
 }
 
 model product_variants {
@@ -86,6 +89,7 @@ model product_variants {
     status     Boolean  @default(false)
     productId  String
     products   products @relation(fields: [productId], references: [id])
+    images     images[]
 }
 
 model product_rates {
@@ -98,13 +102,16 @@ model product_rates {
 }
 
 model product_promos {
-    id         String   @id @default(uuid()) @map("_id")
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
-    title      String
-    status     Boolean  @default(false)
-    productId  String
-    products   products @relation(fields: [productId], references: [id])
+    id                  String   @id @default(uuid()) @map("_id")
+    created_at          DateTime @default(now())
+    updated_at          DateTime @updatedAt
+    title               String
+    promo_code          String
+    discount_price      Int
+    discount_percentage Int    
+    status              Boolean  @default(false)
+    productId           String
+    products            products @relation(fields: [productId], references: [id])
 }
 
 model products {

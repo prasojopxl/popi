@@ -12,7 +12,7 @@ import logger from "./lib/logger";
 dotenv.config()
 const port = process.env.PORT || 7001 || 7002
 const app = express()
-let whitelist = ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173", "https://ilaku.vercel.app/"]
+let whitelist = ["http://localhost:3000", "http://localhost:3001", "http://localhost:5173", "https://ilaku.vercel.app", "https://ilaku.vercel.app/"]
 const corsOptions = {
     origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
         if (!origin || whitelist.indexOf(origin) !== -1) {

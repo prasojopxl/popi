@@ -5,6 +5,7 @@ import routeUsers from "./app/user/index"
 import routeImages from "./app/images/index"
 import routeMail from "./app/mail/index"
 import routeAuth from "./app/auth/index"
+import routeCategories from "./app/product-categories/index"
 import multer from "multer";
 import path from "path"
 import logger from "./lib/logger";
@@ -45,7 +46,6 @@ app.use(express.urlencoded({
     extended: false
 }))
 
-logger.info("App started global logger...")
 
 
 // URL
@@ -59,6 +59,7 @@ app.use("/users", routeUsers)
 app.use("/images", multer({ storage: storage }).any(), routeImages)
 app.use("/mail", routeMail)
 app.use("/auth", routeAuth)
+app.use("/categories", routeCategories)
 
 app.listen(port, () => {
     console.log(`server is running on http://localhost:${port}`)

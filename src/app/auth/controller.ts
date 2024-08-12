@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import joi from "joi"
 import bcrypt, { compareSync } from "bcryptjs"
 import jwt from "jsonwebtoken"
+import logger from "../../lib/logger";
 
 const prisma = new PrismaClient();
 export function Login(req: Request, res: Response, next: NextFunction) {
@@ -13,6 +14,7 @@ export function Login(req: Request, res: Response, next: NextFunction) {
         })
         const { error } = shcema.validate(req.body)
         if (error) {
+            logger.error(error.message)
             return res.status(400).send({
                 message: error.message
             })

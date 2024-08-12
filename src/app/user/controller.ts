@@ -3,16 +3,17 @@ import { Request, Response, NextFunction } from 'express';
 import joi from "joi"
 import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken";
+import logger from "../../lib/logger";
 
 const prisma = new PrismaClient()
 
 export function postUser(req: Request, res: Response, next: NextFunction) {
-    const shcema = joi.object().keys({
+    const schema = joi.object().keys({
         name: joi.string().min(3).required(),
         username: joi.string().email().required(),
         password: joi.string().required(),
     })
-    const { error } = shcema.validate(req.body)
+    const { error } = schema.validate(req.body)
     if (error) {
         return res.status(400).send({
             message: error.message
@@ -49,7 +50,7 @@ export function postUser(req: Request, res: Response, next: NextFunction) {
             })
 
         } catch (error) {
-            console.log(error)
+            logger.error(error)
         }
     }
     main()
@@ -73,7 +74,7 @@ export function getUsers(req: Request, res: Response, next: NextFunction) {
             })
             res.json(users)
         } catch (error) {
-            console.log(error)
+            logger.error(error)
         }
     }
     main()
@@ -105,7 +106,7 @@ export function getUserID(req: Request, res: Response, next: NextFunction) {
             }
             res.json(user)
         } catch (error) {
-            console.log(error)
+            logger.error(error)
         }
     }
     main()
@@ -147,6 +148,7 @@ export function getUserMe(req: Request, res: Response, next: NextFunction) {
             }
             res.json(user)
         } catch (error) {
+            logger.error(error)
             res.status(401).send({
                 message: "Unauthorized"
             });
@@ -186,6 +188,7 @@ export function updateUserMe(req: Request, res: Response, next: NextFunction) {
                 message: "User updated successfully",
             })
         } catch (error) {
+            logger.error(error)
             res.status(401).send({
                 message: "Unauthorized"
             });

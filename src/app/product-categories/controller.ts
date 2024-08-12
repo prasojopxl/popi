@@ -63,7 +63,19 @@ export function postCategoryProduct(req: Request, res: Response, next: NextFunct
 export function getCategories(req: Request, res: Response, next: NextFunction) {
     async function main() {
         try {
-            return res.json(await prisma.product_categories.findMany())
+            const status: any = req.query.status === 'true' ? true : req.query.status === 'false' ? false : null;
+            if (status !== null) {
+                const categories = await prisma.product_categories.findMany({
+                    where: {
+                      status,
+                    },
+                  });
+                  res.json(categories);    
+            }
+            else {
+                res.json(await prisma.product_categories.findMany())
+            }
+
         } catch (error) {
             logger.error(error)
         }

@@ -25,8 +25,6 @@ export const verfyToken = async (req: Request, res: Response, next: NextFunction
                 id: dataJwt.data.id
             }
         })
-        logger.info("user", user)
-        logger.info("App middleware logger....")
         if (!user) {
             return res.status(400).json({
                 message: "User not found",
@@ -34,7 +32,7 @@ export const verfyToken = async (req: Request, res: Response, next: NextFunction
         }
         next();
     } catch (error) {
-        console.error(error);
+        logger.error(error)
         res.status(401).send({
             message: "Unauthorized"
         });

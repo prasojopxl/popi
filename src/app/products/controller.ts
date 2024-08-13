@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from 'express';
 import joi from "joi"
 import logger from "../../lib/logger";
+import _ from "lodash"
 
 const prisma = new PrismaClient()
 
@@ -65,21 +66,13 @@ export function postProduct(req: Request, res: Response, next: NextFunction) {
 export function getProducts(req: Request, res: Response, next: NextFunction) {
     async function main() {
         try {
-            res.json(await prisma.products.findMany({
-                select: {
-                    id: true,
-                    created_at: true,
-                    updated_at: true,
-                    title: true,
-                    status: true,
-                    description: true,
-                    price: true,
-                    stock: true,
-                    recommended: true,
-                    rate_count: true,                    
-                    categories: true
+            const products = await prisma.products.findMany({
+                include: {
+                    category: true
                 }
-            }))
+            })
+            const data = _.orderBy(products, ['updated_at'], ['desc'])
+            res.json(data)
         } catch (error) {
             logger.error(error)
         }

@@ -80,35 +80,25 @@ model products {
     description         String
     stock               Int
     recommended         Boolean  @default(false)
-    rate_count          Int
-    categories          product_categories[]  @relation("ProductCategoryProducts")
+    rate_count          Int?
     product_variants    product_variants[]
     product_promos      product_promos[]
     images              images[]
     product_rates       product_rates[]
     orders              orders[]
-
-    product_category_products product_category_products[] @relation(map: "product_category_products_ibfk_1")
+    categoryId          String?
+    category           product_categories? @relation(fields: [categoryId], references: [id])
 }
 
 model product_categories {
     id                          String      @id @default(uuid()) @map("_id")
     created_at                  DateTime    @default(now())
     updated_at                  DateTime    @updatedAt
-    title                       String      @unique
-    status                      Boolean     @default(false)
-    products                    products[]  @relation("ProductCategoryProducts")
-    product_category_products product_category_products[] @relation(map: "product_category_products_ibfk_2")
+    title                       String?      @unique
+    status                      Boolean?     @default(false)
+    products                    products[]
 }
 
-model product_category_products {
-    product_id         String
-    category_id        String
-    products           products?           @relation(fields: [product_id], references: [id], onUpdate: Restrict, map: "product_category_products_ibfk_1")
-    product_categories product_categories? @relation(fields: [category_id], references: [id], onUpdate: Restrict, map: "product_category_products_ibfk_2")
-    @@id([product_id, category_id])
-    @@index([category_id], map: "category_id")  
-}
 
 
 model product_variants {

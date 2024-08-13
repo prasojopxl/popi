@@ -5,7 +5,7 @@ import { getProducts, postProduct } from "./controller"
 const app = express()
 
 app.route("/")
-    .get(verfyToken, getProducts)
+    .get(getProducts)
     .post(verfyToken, postProduct)
 
 export default app

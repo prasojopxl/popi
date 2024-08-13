@@ -1,8 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from 'express';
 import joi from "joi"
-import bcryptjs from "bcryptjs"
-import jwt from "jsonwebtoken";
 import logger from "../../lib/logger";
 
 const prisma = new PrismaClient()

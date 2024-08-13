@@ -33,7 +33,7 @@ export function Login(req: Request, res: Response, next: NextFunction) {
         }
         const checkPassword = await bcrypt.compare(req.body.password, checkUser.password)
         const token: any = jwt.sign({
-            exp: Math.floor(Date.now() / 1000) + (60 * 60), //exp 1 hour
+            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 12), //exp 12 hour
             data: {
                 id: checkUser.id,
                 username: checkUser.username,

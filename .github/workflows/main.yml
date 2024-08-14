@@ -19,6 +19,7 @@ jobs:
           cd /var/www/popi.stagingaja.com/popi
           git pull origin main
           git status
-          npm i
-          npm run build
+          node --version
+          yarn
+          yarn build
           pm2 restart popi-prod

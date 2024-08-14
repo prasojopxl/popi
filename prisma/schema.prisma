@@ -87,7 +87,7 @@ model products {
     product_rates       product_rates[]
     orders              orders[]
     categoryId          String?
-    category            product_categories? @relation(fields: [categoryId], references: [id])
+    category            product_categories? @relation(fields: [categoryId], references: [id]) 
 }
 
 model product_categories {

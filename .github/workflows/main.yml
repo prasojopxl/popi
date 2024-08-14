@@ -1,0 +1,24 @@
+name: CD
+
+on: 
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy
+    - uses: actions/setup-node@v4
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        script: |
+          cd /var/www/popi.stagingaja.com/popi
+          git pull origin main
+          git status
+          npm i
+          npm run build
+          pm2 restart popi-prod

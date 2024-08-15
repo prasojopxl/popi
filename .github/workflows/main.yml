@@ -1,4 +1,4 @@
-name: CD
+name: CD Deploy
 
 on: 
   push:
@@ -26,7 +26,7 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         script: |
           cd /var/www/popi.stagingaja.com/popi
-          git pull origin main
+          git pull origin dev
           git status
           node --version
           npm ci

@@ -13,12 +13,10 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 22.4.0
-        cache: 'yarn'
+        cache: yarn
 
     - name: Deploy
       uses: appleboy/ssh-action@master
-      run: |
-      working-directory: /var/www/popi.stagingaja.com/popi
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}

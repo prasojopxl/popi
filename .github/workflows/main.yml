@@ -17,7 +17,7 @@ jobs:
 
     - name: Deploy
       uses: appleboy/ssh-action@master
-      run: ||
+      run: |
       working-directory: /var/www/popi.stagingaja.com/popi
       with:
         host: ${{ secrets.HOST }}
@@ -28,7 +28,6 @@ jobs:
           git pull origin main
           git status
           node --version
-          npm i  yarn
-          yarn 
+          yarn install
           yarn build
           pm2 restart popi-prod

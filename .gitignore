@@ -11,5 +11,5 @@ logs
 .env.local
 .env.development
 
-#yarn.lock
-#package-lock.json
+yarn.lock
+package-lock.json

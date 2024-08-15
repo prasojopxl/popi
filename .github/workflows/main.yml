@@ -10,7 +10,7 @@ jobs:
 
     steps:
     - name: Setup Node.js v22.4.0
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@latest
       with:
         node-version: 22.4.0
         cache: npm
@@ -26,6 +26,6 @@ jobs:
           git pull origin main
           git status
           node --version
-          yarn install
-          yarn build
+          npm install
+          npm run build
           pm2 restart popi-prod

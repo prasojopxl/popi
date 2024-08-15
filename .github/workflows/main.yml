@@ -29,12 +29,6 @@ jobs:
           git pull origin dev
           git status
           node --version
-<<<<<<< HEAD
           yarn
           yarn build
           pm2 restart popi-prod
-=======
-          npm ci
-          npm run build
-          pm2 restart popi-prod
->>>>>>> eb45e0b47928624e9eb7be59cbe649d266fe3324

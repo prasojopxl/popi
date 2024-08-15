@@ -13,7 +13,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 22.4.0
-        cache: yarn
+        cache: npm
 
     - name: Deploy
       uses: appleboy/ssh-action@master

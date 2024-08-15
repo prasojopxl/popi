@@ -1,14 +1,23 @@
-name: CD
+name: CD Deploy
 
 on: 
   push:
-    branches: [ main ]
+    branches: [ dev ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install dependencies
+      run: yarn    
+
+    - name: Setup Node.js v22.4.0
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.4.0
+        cache: npm
+
     - name: Deploy
       uses: appleboy/ssh-action@master
       with:
@@ -17,9 +26,15 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         script: |
           cd /var/www/popi.stagingaja.com/popi
-          git pull origin main
+          git pull origin dev
           git status
           node --version
+<<<<<<< HEAD
           yarn
           yarn build
           pm2 restart popi-prod
+=======
+          npm ci
+          npm run build
+          pm2 restart popi-prod
+>>>>>>> eb45e0b47928624e9eb7be59cbe649d266fe3324

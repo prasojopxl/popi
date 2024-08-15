@@ -18,7 +18,7 @@ jobs:
         node-version: 22.4.0
         cache: npm
         nvm: true
-        nvm_path: '/root/.nvm/versions/node/v22.4.0/bin/node'
+        nvm_path: '/root/.nvm/versions/node/v22.4.0/bin'
 
 
     - name: Deploy

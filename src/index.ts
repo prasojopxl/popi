@@ -52,7 +52,7 @@ app.use(express.urlencoded({
 // URL
 app.get("/", (req, res) => {
     res.status(200).send({
-        message: "Welcome APP Popi !!!!!!!"
+        message: "Welcome APP"
     })
 })
 app.use("/public", express.static(path.join(path.dirname(__dirname), "uploads/images")))

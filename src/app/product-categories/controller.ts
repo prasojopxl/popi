@@ -6,7 +6,7 @@ import logger from "../../lib/logger";
 const prisma = new PrismaClient()
 
 export function postCategoryProduct(req: Request, res: Response, next: NextFunction) {
-    const checkCategory = async ()=> {
+    const checkCategory = async () => {
         const category = await prisma.product_categories.findUnique({
             where: {
                 title: req.body.title
@@ -14,7 +14,7 @@ export function postCategoryProduct(req: Request, res: Response, next: NextFunct
         })
         return category
     }
-    checkCategory().then((item:any)=> {
+    checkCategory().then((item: any) => {
         if (item) {
             return res.status(400).send({
                 message: `Category ${req.body.title} already exists`
@@ -31,7 +31,7 @@ export function postCategoryProduct(req: Request, res: Response, next: NextFunct
                 }
             })
             res.send({
-                message:`Category ${req.body.title} created successfully`
+                message: `Category ${req.body.title} created successfully`
             })
         } catch (error) {
             logger.error(error)
@@ -48,13 +48,13 @@ export function getCategories(req: Request, res: Response, next: NextFunction) {
             if (status !== null) {
                 const categories = await prisma.product_categories.findMany({
                     where: {
-                      status,
+                        status,
                     },
                     include: {
-                      products: true,
+                        products: true,
                     }
-                  });
-                  res.json(categories);    
+                });
+                res.json(categories);
             }
             else {
                 res.json(await prisma.product_categories.findMany({
@@ -71,9 +71,9 @@ export function getCategories(req: Request, res: Response, next: NextFunction) {
     main()
 }
 
-export function getCategoriesById(req:Request, res:Response, next:NextFunction) {
+export function getCategoriesById(req: Request, res: Response, next: NextFunction) {
     async function main() {
-        try {            
+        try {
             const category = await prisma.product_categories.findUnique({
                 where: {
                     id: req.params.id
@@ -100,7 +100,7 @@ export async function updateCategoryProduct(req: Request, res: Response, next: N
         })
     }
 
-    const checkCategory = async ()=> {
+    const checkCategory = async () => {
         const category = await prisma.product_categories.findFirst({
             where: {
                 id: req.params.id
@@ -109,13 +109,13 @@ export async function updateCategoryProduct(req: Request, res: Response, next: N
         return category
     }
 
-    
+
     const category = await checkCategory()
 
-    if (category===null) {
-      return res.status(400).send({
-        message: `Category ${req.params.id} not found`
-      })
+    if (category === null) {
+        return res.status(400).send({
+            message: `Category ${req.params.id} not found`
+        })
     } else {
         async function main() {
             try {
@@ -129,11 +129,11 @@ export async function updateCategoryProduct(req: Request, res: Response, next: N
                     }
                 })
                 res.json({
-                    message:"Category has been update",
+                    message: "Category has been update",
                     category
-                })        
+                })
             } catch (error) {
-                logger.error(error)            
+                logger.error(error)
             }
             // try {
             //     const category = await prisma.product_categories.update({
@@ -151,7 +151,7 @@ export async function updateCategoryProduct(req: Request, res: Response, next: N
             // }
         }
         main()
-    
+
     }
 
 

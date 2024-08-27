@@ -85,3 +85,26 @@ export function getProducts(req: Request, res: Response, next: NextFunction) {
     }
     main()
 }
+
+export function getProductsById(req: Request, res: Response, next: NextFunction) {
+    async function main() {
+        try {
+            const product = await prisma.products.findUnique({
+                where: {
+                    id: req.params.id
+                },
+                include: {
+                    product_categories: true,
+                    images: true,
+                    product_rates: true,
+                    product_variants: true,
+                    tags: true
+                }
+            })
+            res.json(product)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    main()
+}

@@ -85,6 +85,7 @@ model products {
     orders              orders[]
     product_categories  product_categories[]
     product_variants    product_variants[]
+    tags                tags[]
 }
 
 model product_categories {
@@ -132,7 +133,14 @@ model product_rates {
     products   products @relation(fields: [productId], references: [id])
 }
 
-
+model tags {
+    id         String   @id @default(uuid()) @map("_id")
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    title      String
+    status     Boolean  @default(false)
+    products   products[]
+}
 
 
 model orders {

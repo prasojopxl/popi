@@ -86,8 +86,7 @@ model products {
     images              images[]
     product_rates       product_rates[]
     orders              orders[]
-    categoryId          String?
-    category            product_categories? @relation(fields: [categoryId], references: [id]) 
+    product_categories  product_categories[]
 }
 
 model product_categories {

@@ -14,7 +14,8 @@ export function postProduct(req: Request, res: Response, next: NextFunction) {
         price: joi.number().required(),
         stock: joi.number().required(),
         recommended: joi.boolean().required(),
-        rate_count: joi.number().required()
+        rate_count: joi.number().required(),
+        product_categories: joi.array().required()
     })
 
     const { error } = schema.validate(req.body)
@@ -50,7 +51,12 @@ export function postProduct(req: Request, res: Response, next: NextFunction) {
                     price: req.body.price,
                     stock: req.body.stock,
                     recommended: req.body.recommended,
-                    rate_count: req.body.rate_count                    
+                    rate_count: req.body.rate_count,
+                    product_categories: {
+                        connect: req.body.product_categories.map((categoryId: string) => ({
+                            id: categoryId
+                        })),
+                    }
                 }
             })
             res.send({
@@ -68,7 +74,7 @@ export function getProducts(req: Request, res: Response, next: NextFunction) {
         try {
             const products = await prisma.products.findMany({
                 include: {
-                    category: true
+                    product_categories: true
                 }
             })
             const data = _.orderBy(products, ['updated_at'], ['desc'])

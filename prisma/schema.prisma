@@ -35,10 +35,8 @@ model images {
     mimetype            String
     userId              String?
     users               users?        @relation(fields: [userId], references: [id])
-    productId           String?
-    products            products?     @relation(fields: [productId], references: [id])
-    product_varian_id   String?
-    product_variants    product_variants? @relation(fields: [product_varian_id], references: [id])
+    products            products[]
+    product_categories  product_categories[]
 }
 
 model posts {
@@ -81,12 +79,12 @@ model products {
     stock               Int
     recommended         Boolean  @default(false)
     rate_count          Int?
-    product_variants    product_variants[]
     product_promos      product_promos[]
     images              images[]
     product_rates       product_rates[]
     orders              orders[]
     product_categories  product_categories[]
+    product_variants    product_variants[]
 }
 
 model product_categories {
@@ -96,6 +94,8 @@ model product_categories {
     title                       String?      @unique
     status                      Boolean?     @default(false)
     products                    products[]
+    imageId                     String?
+    images                      images? @relation(fields: [imageId], references: [id])
 }
 
 
@@ -106,9 +106,7 @@ model product_variants {
     updated_at DateTime @updatedAt
     title      String
     status     Boolean  @default(false)
-    productId  String
-    products   products @relation(fields: [productId], references: [id])
-    images     images[]
+    products   products[]
 }
 
 model product_promos {

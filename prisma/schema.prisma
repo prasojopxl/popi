@@ -75,7 +75,7 @@ model products {
     title               String
     price               Int
     status              Boolean  @default(false)
-    description         String
+    description         String @db.Text
     stock               Int
     recommended         Boolean  @default(false)
     rate_count          Int?

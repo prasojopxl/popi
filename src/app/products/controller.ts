@@ -15,7 +15,8 @@ export function postProduct(req: Request, res: Response, next: NextFunction) {
         stock: joi.number().required(),
         recommended: joi.boolean().required(),
         rate_count: joi.number().required(),
-        categories: joi.array().required()
+        categories: joi.array().required(),
+        images: joi.array()
     })
 
     const { error } = schema.validate(req.body)
@@ -53,9 +54,14 @@ export function postProduct(req: Request, res: Response, next: NextFunction) {
                     recommended: req.body.recommended,
                     rate_count: req.body.rate_count,
                     categories: {
-                        connect: req.body.product_categories.map((categoryId: string) => ({
+                        connect: req.body.categories.map((categoryId: string) => ({
                             id: categoryId
                         })),
+                    },
+                    images: {
+                        connect: req.body.images.map((imageId: string) => ({
+                            id: imageId
+                        }))
                     }
                 }
             })
@@ -63,6 +69,7 @@ export function postProduct(req: Request, res: Response, next: NextFunction) {
                 message: `Product ${req.body.title} created successfully`,
             })
         } catch (error) {
+            console.log(error)
             logger.error(error)
         }
     }
@@ -223,5 +230,33 @@ export async function updateProduct(req: Request, res: Response, next: NextFunct
         main()
 
     }
+}
+
+export async function deleteProduct(req: Request, res: Response, next: NextFunction) {
+    async function main() {
+        const checkProduct = await prisma.products.findFirst({
+            where: {
+                id: req.params.id
+            }
+        })
+        if (!checkProduct) {
+            return res.status(400).send({
+                message: `Product ${req.params.id} not found`
+            })
+        }
+        try {
+            const product = await prisma.products.delete({
+                where: {
+                    id: req.params.id
+                }
+            })
+            res.json({
+                message: `Product ${req.params.id} deleted successfully`
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    main()
 }
 

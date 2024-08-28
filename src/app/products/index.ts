@@ -1,6 +1,6 @@
 import express from "express"
 import { verfyToken } from "../middleware/token"
-import { getProducts, getProductsById, postProduct, updateProduct } from "./controller"
+import { deleteProduct, getProducts, getProductsById, postProduct, updateProduct } from "./controller"
 
 const app = express()
 
@@ -10,6 +10,7 @@ app.route("/")
 
 app.route("/:id")
     .get(getProductsById)
-    .put(updateProduct)
+    .put(verfyToken, updateProduct)
+    .delete(verfyToken, deleteProduct)
 
 export default app

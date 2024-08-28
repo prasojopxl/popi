@@ -92,7 +92,7 @@ export function getProducts(req: Request, res: Response, next: NextFunction) {
                         categories: true,
                         product_variants: true,
                         tags: true,
-                        promos: true,
+                        product_promos: true,
                     }
                 })
                 const data = _.orderBy(products, ['updated_at'], ['desc'])
@@ -108,7 +108,7 @@ export function getProducts(req: Request, res: Response, next: NextFunction) {
                     categories: true,
                     product_variants: true,
                     tags: true,
-                    promos: true,
+                    product_promos: true,
                 }
             })
             const data = _.orderBy(products, ['updated_at'], ['desc'])
@@ -132,7 +132,7 @@ export function getProductsById(req: Request, res: Response, next: NextFunction)
                     categories: true,
                     product_variants: true,
                     tags: true,
-                    promos: true,
+                    product_promos: true,
                 }
             })
             res.json({

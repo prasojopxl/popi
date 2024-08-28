@@ -79,7 +79,7 @@ model products {
     stock               Int
     recommended         Boolean  @default(false)
     rate_count          Int?
-    promos              product_promos[]
+    product_promos      product_promos[]
     images              images[]
     orders              orders[]
     categories          product_categories[]

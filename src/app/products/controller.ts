@@ -79,6 +79,26 @@ export function postProduct(req: Request, res: Response, next: NextFunction) {
 export function getProducts(req: Request, res: Response, next: NextFunction) {
     async function main() {
         try {
+            const getSearch = req.query.search ? req.query.search : null
+            if (getSearch) {
+                const products = await prisma.products.findMany({
+                    where: {
+                        title: {
+                            contains: `${getSearch}`
+                        }
+                    },
+                    include: {
+                        images: true,
+                        categories: true,
+                        variants: true,
+                        tags: true,
+                        promos: true,
+                    }
+                })
+                const data = _.orderBy(products, ['updated_at'], ['desc'])
+                res.json(data)
+            }
+
             const products = await prisma.products.findMany({
                 include: {
                     images: true,
@@ -91,7 +111,7 @@ export function getProducts(req: Request, res: Response, next: NextFunction) {
             const data = _.orderBy(products, ['updated_at'], ['desc'])
             res.json(data)
         } catch (error) {
-            logger.error(error)
+            console.log(error)
         }
     }
     main()

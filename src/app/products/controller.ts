@@ -52,7 +52,7 @@ export function postProduct(req: Request, res: Response, next: NextFunction) {
                     stock: req.body.stock,
                     recommended: req.body.recommended,
                     rate_count: req.body.rate_count,
-                    product_categories: {
+                    categories: {
                         connect: req.body.product_categories.map((categoryId: string) => ({
                             id: categoryId
                         })),
@@ -74,7 +74,7 @@ export function getProducts(req: Request, res: Response, next: NextFunction) {
         try {
             const products = await prisma.products.findMany({
                 include: {
-                    product_categories: true
+                    categories: true
                 }
             })
             const data = _.orderBy(products, ['updated_at'], ['desc'])
@@ -94,11 +94,11 @@ export function getProductsById(req: Request, res: Response, next: NextFunction)
                     id: req.params.id
                 },
                 include: {
-                    product_categories: true,
+                    categories: true,
                     images: true,
                     product_rates: true,
                     product_variants: true,
-                    tags: true
+                    tags: true,
                 }
             })
             res.json(product)

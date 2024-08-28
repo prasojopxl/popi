@@ -95,7 +95,7 @@ model product_categories {
     status                      Boolean?     @default(false)
     products                    products[]
     imageId                     String?
-    images                      images? @relation(fields: [imageId], references: [id])
+    images                      images? @relation(fields: [imageId], references: [id], onDelete: SetNull)
 }
 
 
@@ -119,7 +119,7 @@ model product_promos {
     discount_percentage Int    
     status              Boolean  @default(false)
     productId           String
-    products            products @relation(fields: [productId], references: [id])
+    products            products? @relation(fields: [productId], references: [id])
 }
 
 

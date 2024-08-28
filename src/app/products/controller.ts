@@ -96,7 +96,10 @@ export function getProducts(req: Request, res: Response, next: NextFunction) {
                     }
                 })
                 const data = _.orderBy(products, ['updated_at'], ['desc'])
-                res.json(data)
+                res.json({
+                    result: data.length,
+                    data: data
+                })
             }
 
             const products = await prisma.products.findMany({
@@ -109,7 +112,7 @@ export function getProducts(req: Request, res: Response, next: NextFunction) {
                 }
             })
             const data = _.orderBy(products, ['updated_at'], ['desc'])
-            res.json(data)
+            res.json({ data })
         } catch (error) {
             console.log(error)
         }
@@ -132,7 +135,9 @@ export function getProductsById(req: Request, res: Response, next: NextFunction)
                     promos: true,
                 }
             })
-            res.json(product)
+            res.json({
+                data: product
+            })
         } catch (error) {
             console.log(error)
         }

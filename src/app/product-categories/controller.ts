@@ -54,7 +54,9 @@ export function getCategories(req: Request, res: Response, next: NextFunction) {
                         products: true,
                     }
                 });
-                res.json(categories);
+                res.json({
+                    data: categories
+                });
             }
             else {
                 res.json(await prisma.product_categories.findMany({
@@ -79,7 +81,9 @@ export function getCategoriesById(req: Request, res: Response, next: NextFunctio
                     id: req.params.id
                 }
             })
-            res.json(category)
+            res.json({
+                data: category
+            })
         } catch (error) {
             logger.error(error)
         }

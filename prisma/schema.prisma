@@ -83,7 +83,7 @@ model products {
     images              images[]
     orders              orders[]
     categories          product_categories[]
-    variants            product_variants[]
+    product_variants    product_variants[]
     tags                tags[]
 }
 

@@ -90,7 +90,7 @@ export function getProducts(req: Request, res: Response, next: NextFunction) {
                     include: {
                         images: true,
                         categories: true,
-                        variants: true,
+                        product_variants: true,
                         tags: true,
                         promos: true,
                     }
@@ -106,7 +106,7 @@ export function getProducts(req: Request, res: Response, next: NextFunction) {
                 include: {
                     images: true,
                     categories: true,
-                    variants: true,
+                    product_variants: true,
                     tags: true,
                     promos: true,
                 }
@@ -130,7 +130,7 @@ export function getProductsById(req: Request, res: Response, next: NextFunction)
                 include: {
                     images: true,
                     categories: true,
-                    variants: true,
+                    product_variants: true,
                     tags: true,
                     promos: true,
                 }

@@ -79,12 +79,11 @@ model products {
     stock               Int
     recommended         Boolean  @default(false)
     rate_count          Int?
-    product_promos      product_promos[]
+    promos              product_promos[]
     images              images[]
-    product_rates       product_rates[]
     orders              orders[]
     categories          product_categories[]
-    product_variants    product_variants[]
+    variants            product_variants[]
     tags                tags[]
 }
 
@@ -123,15 +122,6 @@ model product_promos {
     products            products @relation(fields: [productId], references: [id])
 }
 
-
-model product_rates {
-    id         String   @id @default(uuid()) @map("_id")
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
-    rate       Int
-    productId  String
-    products   products @relation(fields: [productId], references: [id])
-}
 
 model tags {
     id         String   @id @default(uuid()) @map("_id")

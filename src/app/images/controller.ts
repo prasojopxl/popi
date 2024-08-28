@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client'
 import imageSize from "image-size";
 import joi from "joi"
-
+import _ from "lodash";
 
 const path = require('path');
 const prisma = new PrismaClient()
@@ -44,7 +44,7 @@ export function createImage(req: Request, res: Response, next: NextFunction) {
             }))
             res.status(201).send({
                 message: "Images upload successfully",
-                data: images?.map((image:any) => ({
+                data: images?.map((image: any) => ({
                     title: image.title,
                     url: image.url,
                     mimetype: image.mimetype
@@ -62,16 +62,18 @@ export function getImageID(req: Request, res: Response, next: NextFunction) {
     async function main() {
         try {
 
-            const image = await prisma.images?.findUnique({
+            const image: any = await prisma.images?.findUnique({
                 where: {
                     id: req.params.id
-                }
+                },
+
             })
             if (!image) {
                 return res.status(400).send({
                     message: "Image not found"
                 })
             }
+            delete image?.UserId
             res.json(image)
         } catch (error) {
             console.log(error)
@@ -83,8 +85,9 @@ export function getImageID(req: Request, res: Response, next: NextFunction) {
 export function getImages(req: Request, res: Response, next: NextFunction) {
     async function main() {
         try {
-            const images = await prisma.images.findMany()
-            res.json(images)
+            const images: any = await prisma.images.findMany()
+            const imagesData = _.map(images, (image) => _.omit(image, "userId"))
+            res.json(imagesData)
         } catch (error) {
             console.log(error)
         }

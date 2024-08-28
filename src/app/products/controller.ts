@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from 'express';
-import joi from "joi"
+import joi, { func } from "joi"
 import logger from "../../lib/logger";
 import _ from "lodash"
 
@@ -15,7 +15,7 @@ export function postProduct(req: Request, res: Response, next: NextFunction) {
         stock: joi.number().required(),
         recommended: joi.boolean().required(),
         rate_count: joi.number().required(),
-        product_categories: joi.array().required()
+        categories: joi.array().required()
     })
 
     const { error } = schema.validate(req.body)
@@ -74,7 +74,11 @@ export function getProducts(req: Request, res: Response, next: NextFunction) {
         try {
             const products = await prisma.products.findMany({
                 include: {
-                    categories: true
+                    images: true,
+                    categories: true,
+                    variants: true,
+                    tags: true,
+                    promos: true,
                 }
             })
             const data = _.orderBy(products, ['updated_at'], ['desc'])
@@ -94,11 +98,11 @@ export function getProductsById(req: Request, res: Response, next: NextFunction)
                     id: req.params.id
                 },
                 include: {
-                    categories: true,
                     images: true,
-                    product_rates: true,
-                    product_variants: true,
+                    categories: true,
+                    variants: true,
                     tags: true,
+                    promos: true,
                 }
             })
             res.json(product)
@@ -108,3 +112,116 @@ export function getProductsById(req: Request, res: Response, next: NextFunction)
     }
     main()
 }
+
+export async function updateProduct(req: Request, res: Response, next: NextFunction) {
+    const schema = joi.object().keys({
+        title: joi.string(),
+        status: joi.boolean(),
+        description: joi.string(),
+        price: joi.number(),
+        stock: joi.number(),
+        recommended: joi.boolean(),
+        rate_count: joi.number(),
+        categories: joi.array(),
+        images: joi.array()
+    })
+    const { error } = schema.validate(req.body)
+    if (error) {
+        return res.status(400).send({
+            message: error.message
+        })
+    }
+
+    const checkProduct = async () => {
+        const product = await prisma.products.findFirst({
+            where: {
+                id: req.params.id
+            }
+        })
+        return product
+    }
+    const product = await checkProduct()
+
+    if (product === null) {
+        return res.status(400).send({
+            message: `Product ${req.params.id} not found`
+        })
+    }
+    else {
+        async function main() {
+            try {
+                const deleteCategoryProduct: any = req.query.deletecategory ? req.query.deletecategory : false
+                const dataProduct: any = await prisma.products.findUnique({
+                    where: {
+                        id: req.params.id
+                    },
+                    select: {
+                        categories: {
+                            select: {
+                                id: true
+                            }
+                        }
+                    }
+                })
+
+
+                if (deleteCategoryProduct) {
+                    const hasCategory = dataProduct.categories.some((item: any) => item.id === deleteCategoryProduct);
+                    if (!hasCategory) {
+                        return res.status(400).send({
+                            message: "Product category not found"
+                        })
+                    }
+                    else {
+                        await prisma.products.update({
+                            where: {
+                                id: req.params.id
+                            },
+                            data: {
+                                categories: {
+                                    delete: {
+                                        id: deleteCategoryProduct
+                                    }
+                                }
+                            }
+                        })
+
+                    }
+
+                }
+                const product = await prisma.products.update({
+                    where: {
+                        id: req.params.id
+                    },
+                    data: {
+                        title: req.body.title,
+                        status: req.body.status,
+                        description: req.body.description,
+                        price: req.body.price,
+                        stock: req.body.stock,
+                        recommended: req.body.recommended,
+                        rate_count: req.body.rate_count,
+                        categories: req.body.categories ? {
+                            connect: req.body.categories.map((categoryId: string) => ({
+                                id: categoryId
+                            })),
+                        } : undefined,
+                        images: req.body.images ? {
+                            connect: req.body.images.map((imageId: string) => ({
+                                id: imageId
+                            })),
+                        } : undefined,
+                    }
+                })
+                res.json({
+                    message: "Product has been update"
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        main()
+
+    }
+}
+

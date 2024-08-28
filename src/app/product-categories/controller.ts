@@ -44,7 +44,7 @@ export function postCategoryProduct(req: Request, res: Response, next: NextFunct
 export function getCategories(req: Request, res: Response, next: NextFunction) {
     async function main() {
         try {
-            const status: any = req.query.status === 'true' ? true : req.query.status === 'false' ? false : null;
+            const status: boolean | null = req.query.status === 'true' ? true : req.query.status === 'false' ? false : null;
             if (status !== null) {
                 const categories = await prisma.product_categories.findMany({
                     where: {
@@ -135,20 +135,7 @@ export async function updateCategoryProduct(req: Request, res: Response, next: N
             } catch (error) {
                 logger.error(error)
             }
-            // try {
-            //     const category = await prisma.product_categories.update({
-            //         where: {
-            //             id: req.params.id
-            //         },
-            //         data: {
-            //             title: req.body.title,
-            //             status: req.body.status
-            //         }
-            //     })
-            //     res.json(category)
-            // } catch (error) {
-            //     logger.error(error)
-            // }
+
         }
         main()
 

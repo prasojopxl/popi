@@ -55,6 +55,7 @@ export function getCategories(req: Request, res: Response, next: NextFunction) {
                     }
                 });
                 res.json({
+                    total: categories.length,
                     data: categories
                 });
             }

@@ -97,7 +97,7 @@ export function getProducts(req: Request, res: Response, next: NextFunction) {
                 })
                 const data = _.orderBy(products, ['updated_at'], ['desc'])
                 res.json({
-                    result: data.length,
+                    total: data.length,
                     data: data
                 })
             }
@@ -112,7 +112,10 @@ export function getProducts(req: Request, res: Response, next: NextFunction) {
                 }
             })
             const data = _.orderBy(products, ['updated_at'], ['desc'])
-            res.json({ data })
+            res.json({
+                total: data.length,
+                data
+            })
         } catch (error) {
             console.log(error)
         }

@@ -147,3 +147,32 @@ export async function updateVariantsProduct(req: Request, res: Response, next: N
         main()
     }
 }
+
+export async function deleteVariantProduct(req: Request, res: Response, next: NextFunction) {
+    async function main() {
+        const checkVariant = await prisma.product_variants.findUnique({
+            where: {
+                id: req.params.id
+            }
+        })
+        if (!checkVariant) {
+            return res.status(400).send({
+                message: "Variant not found"
+            })
+        }
+
+        try {
+            const variant = await prisma.product_variants.delete({
+                where: {
+                    id: req.params.id
+                }
+            })
+            res.json({
+                message: `Variant ${req.params.id} deleted successfully`
+            })
+        } catch (error) {
+            logger.error(error)
+        }
+    }
+    main()
+}

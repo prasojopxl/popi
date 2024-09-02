@@ -33,6 +33,7 @@ jobs:
           git status
           export PATH=$PATH:/root/.nvm/versions/node/v22.4.0/bin
           node --version
+          npx prisma db push
           yarn
           yarn build
           pm2 restart popi-prod

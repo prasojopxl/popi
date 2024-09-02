@@ -16,7 +16,9 @@ export function postProduct(req: Request, res: Response, next: NextFunction) {
         recommended: joi.boolean().required(),
         rate_count: joi.number().required(),
         categories: joi.array().required(),
-        images: joi.array()
+        tags: joi.array(),
+        product_variants: joi.array(),
+        images: joi.array().required()
     })
 
     const { error } = schema.validate(req.body)
@@ -62,7 +64,17 @@ export function postProduct(req: Request, res: Response, next: NextFunction) {
                         connect: req.body.images.map((imageId: string) => ({
                             id: imageId
                         }))
-                    }
+                    },
+                    product_variants: {
+                        connect: req.body.product_variants.map((variantId: string) => ({
+                            id: variantId
+                        })),
+                    },
+                    tags: {
+                        connect: req.body.tags.map((tagId: string) => ({
+                            id: tagId
+                        })),
+                    },
                 }
             })
             res.send({

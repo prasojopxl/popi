@@ -6,6 +6,7 @@ import routeImages from "./app/images/index"
 import routeMail from "./app/mail/index"
 import routeAuth from "./app/auth/index"
 import routeCategories from "./app/product-categories/index"
+import routeVariants from "./app/product-variants/index"
 import routeProducts from "./app/products/index"
 import multer from "multer";
 import path from "path"
@@ -61,6 +62,7 @@ app.use("/images", multer({ storage: storage }).any(), routeImages)
 app.use("/mail", routeMail)
 app.use("/auth", routeAuth)
 app.use("/categories", routeCategories)
+app.use("/variants", routeVariants)
 app.use("/products", routeProducts)
 
 

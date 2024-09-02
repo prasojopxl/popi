@@ -1,6 +1,6 @@
 import express from "express"
 import { verfyToken } from "../middleware/token"
-import {  deleteCategoryProduct, getCategories, getCategoriesById, postCategoryProduct, updateCategoryProduct } from "./controller"
+import { deleteCategoryProduct, getCategories, getCategoriesById, postCategoryProduct, updateCategoryProduct } from "./controller"
 
 const app = express()
 
@@ -15,5 +15,5 @@ app.route("/:id")
 
 
 
-    
+
 export default app

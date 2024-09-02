@@ -95,3 +95,55 @@ export function getVariantsById(req: Request, res: Response, next: NextFunction)
 
     main()
 }
+
+export async function updateVariantsProduct(req: Request, res: Response, next: NextFunction) {
+    const schema = joi.object().keys({
+        title: joi.string(),
+        status: joi.boolean(),
+    })
+    const { error } = schema.validate(req.body)
+    if (error) {
+        return res.status(400).send({
+            message: error.message
+        })
+    }
+
+    const checkVariants = async () => {
+        const category = await prisma.product_variants.findFirst({
+            where: {
+                id: req.params.id
+            }
+        })
+        return category
+    }
+
+    const variants = await checkVariants()
+
+    if (variants === null) {
+        return res.status(400).send({
+            message: `Variants ${req.params.id} not found`
+        })
+    } else {
+        async function main() {
+            try {
+                const variants = await prisma.product_variants.update({
+                    where: {
+                        id: req.params.id
+                    },
+                    data: {
+                        status: req.body.status,
+                        title: req.body.title
+                    }
+                })
+                res.json({
+                    message: "Variants has been update",
+                    variants
+                })
+            } catch (error) {
+                logger.error(error)
+            }
+
+        }
+        main()
+    }
+}

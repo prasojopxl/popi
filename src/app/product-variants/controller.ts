@@ -38,8 +38,6 @@ export function postVariantProducts(req: Request, res: Response, next: NextFunct
         }
     }
     main()
-
-
 }
 
 export function getAllVariants(req: Request, res: Response, next: NextFunction) {
@@ -76,5 +74,24 @@ export function getAllVariants(req: Request, res: Response, next: NextFunction) 
             logger.error(error)
         }
     }
+    main()
+}
+
+export function getVariantsById(req: Request, res: Response, next: NextFunction) {
+    async function main() {
+        try {
+            const variants = await prisma.product_variants.findUnique({
+                where: {
+                    id: req.params.id
+                }
+            })
+            res.json({
+                data: variants
+            })
+        } catch (error) {
+            logger.error(error)
+        }
+    }
+
     main()
 }

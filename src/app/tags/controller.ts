@@ -5,7 +5,7 @@ import logger from "../../lib/logger";
 
 const prisma = new PrismaClient()
 
-export function postCategoryProduct(req: Request, res: Response, next: NextFunction) {
+export function postTags(req: Request, res: Response, next: NextFunction) {
     const schema = joi.object().keys({
         title: joi.string().required()
     })
@@ -16,25 +16,25 @@ export function postCategoryProduct(req: Request, res: Response, next: NextFunct
         })
     }
 
-    const checkCategory = async () => {
-        const category = await prisma.product_categories.findUnique({
+    const checkTags = async () => {
+        const tag = await prisma.tags.findUnique({
             where: {
                 title: req.body.title
             }
         })
-        return category
+        return tag
     }
-    checkCategory().then((item: any) => {
+    checkTags().then((item: any) => {
         if (item) {
             return res.status(400).send({
-                message: `Category ${req.body.title} already exists`
+                message: `Tag ${req.body.title} already exists`
             })
         }
     })
 
     async function main() {
         try {
-            await prisma.product_categories.create({
+            await prisma.tags.create({
                 data: {
                     title: req.body.title,
                     status: req.body.status
@@ -49,14 +49,16 @@ export function postCategoryProduct(req: Request, res: Response, next: NextFunct
     }
     main()
 
+
+
 }
 
-export function getCategories(req: Request, res: Response, next: NextFunction) {
+export function getAllTags(req: Request, res: Response, next: NextFunction) {
     async function main() {
         try {
             const status: boolean | null = req.query.status === 'true' ? true : req.query.status === 'false' ? false : null;
             if (status !== null) {
-                const categories = await prisma.product_categories.findMany({
+                const tags = await prisma.tags.findMany({
                     where: {
                         status,
                     },
@@ -65,12 +67,12 @@ export function getCategories(req: Request, res: Response, next: NextFunction) {
                     }
                 });
                 res.json({
-                    total: categories.length,
-                    data: categories
+                    total: tags.length,
+                    data: tags
                 });
             }
             else {
-                res.json(await prisma.product_categories.findMany({
+                res.json(await prisma.tags.findMany({
                     include: {
                         products: true
                     }
@@ -84,10 +86,10 @@ export function getCategories(req: Request, res: Response, next: NextFunction) {
     main()
 }
 
-export function getCategoriesById(req: Request, res: Response, next: NextFunction) {
+export function getTagById(req: Request, res: Response, next: NextFunction) {
     async function main() {
         try {
-            const category = await prisma.product_categories.findUnique({
+            const category = await prisma.tags.findUnique({
                 where: {
                     id: req.params.id
                 }
@@ -103,7 +105,7 @@ export function getCategoriesById(req: Request, res: Response, next: NextFunctio
     main()
 }
 
-export async function updateCategoryProduct(req: Request, res: Response, next: NextFunction) {
+export async function updateTag(req: Request, res: Response, next: NextFunction) {
     const schema = joi.object().keys({
         title: joi.string(),
         status: joi.boolean(),
@@ -115,26 +117,26 @@ export async function updateCategoryProduct(req: Request, res: Response, next: N
         })
     }
 
-    const checkCategory = async () => {
-        const category = await prisma.product_categories.findFirst({
+    const checkTag = async () => {
+        const tag = await prisma.tags.findFirst({
             where: {
                 id: req.params.id
             }
         })
-        return category
+        return tag
     }
 
 
-    const category = await checkCategory()
+    const tag = await checkTag()
 
-    if (category === null) {
+    if (tag === null) {
         return res.status(400).send({
-            message: `Category ${req.params.id} not found`
+            message: `Tag ${req.params.id} not found`
         })
     } else {
         async function main() {
             try {
-                const category = await prisma.product_categories.update({
+                const tag = await prisma.tags.update({
                     where: {
                         id: req.params.id
                     },
@@ -145,7 +147,7 @@ export async function updateCategoryProduct(req: Request, res: Response, next: N
                 })
                 res.json({
                     message: "Category has been update",
-                    category
+                    tag
                 })
             } catch (error) {
                 logger.error(error)
@@ -159,27 +161,27 @@ export async function updateCategoryProduct(req: Request, res: Response, next: N
 
 }
 
-export async function deleteCategoryProduct(req: Request, res: Response, next: NextFunction) {
+export async function deleteTag(req: Request, res: Response, next: NextFunction) {
     async function main() {
-        const checkCategory = await prisma.product_categories.findUnique({
+        const checkTag = await prisma.tags.findUnique({
             where: {
                 id: req.params.id
             }
         })
-        if (!checkCategory) {
+        if (!checkTag) {
             return res.status(400).send({
-                message: "Category not found"
+                message: "Tag not found"
             })
         }
 
         try {
-            const category = await prisma.product_categories.delete({
+            const tag = await prisma.tags.delete({
                 where: {
                     id: req.params.id
                 }
             })
             res.json({
-                message: `Category ${req.params.id} deleted successfully`
+                message: `Tag ${req.params.id} deleted successfully`
             })
         } catch (error) {
             logger.error(error)

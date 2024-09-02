@@ -127,7 +127,7 @@ model tags {
     id         String   @id @default(uuid()) @map("_id")
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
-    title      String
+    title      String?  @unique
     status     Boolean  @default(false)
     products   products[]
 }

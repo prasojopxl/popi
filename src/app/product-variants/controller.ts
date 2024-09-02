@@ -6,6 +6,16 @@ import logger from "../../lib/logger";
 const prisma = new PrismaClient()
 
 export function postVariantProducts(req: Request, res: Response, next: NextFunction) {
+    const schema = joi.object().keys({
+        title: joi.string().required()
+    })
+    const { error } = schema.validate(req.body)
+    if (error) {
+        return res.status(400).send({
+            message: error.message
+        })
+    }
+
     const checkVariant = async () => {
         const category = await prisma.product_variants.findUnique({
             where: {

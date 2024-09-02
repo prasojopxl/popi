@@ -8,6 +8,7 @@ import routeAuth from "./app/auth/index"
 import routeCategories from "./app/product-categories/index"
 import routeVariants from "./app/product-variants/index"
 import routeProducts from "./app/products/index"
+import routeTags from "./app/tags/index"
 import multer from "multer";
 import path from "path"
 import logger from "./lib/logger";
@@ -64,6 +65,7 @@ app.use("/auth", routeAuth)
 app.use("/categories", routeCategories)
 app.use("/variants", routeVariants)
 app.use("/products", routeProducts)
+app.use("/tags", routeTags)
 
 
 app.listen(port, () => {
